@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -36,16 +35,13 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Finding mapAlertToFinding(Map<String, Object> alert) {
         String uniqueId = UUID.randomUUID().toString();
 
         // parse top-level fields
         String ghState = (String) alert.get("state");
         String url = (String) alert.get("url");
-        String createdAtStr = (String) alert.get("created_at");
-        String updatedAtStr = (String) alert.get("updated_at");
-        Instant createdAt = createdAtStr != null ? Instant.parse(createdAtStr) : Instant.now();
-        Instant updatedAt = updatedAtStr != null ? Instant.parse(updatedAtStr) : Instant.now();
         String dismissedReason = (String) alert.get("dismissed_reason");
 
         // security_advisory
@@ -103,8 +99,6 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
         finding.setDesc(description);
         finding.setSeverity(internalSeverity);
         finding.setState(internalState);
-        finding.setCreatedAt(createdAt);
-        finding.setUpdatedAt(updatedAt);
         finding.setUrl(url);
         finding.setToolType(ScanToolType.DEPENDABOT);
         finding.setCve(cve);

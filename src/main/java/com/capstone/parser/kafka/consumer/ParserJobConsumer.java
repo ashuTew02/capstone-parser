@@ -38,6 +38,7 @@ public class ParserJobConsumer {
     public void consume(String message) {
         try {
             // Parse the incoming message into ScanJobEvent
+            System.out.println("Received ScanJobEvent: " + message);
             ScanJobEvent event = objectMapper.readValue(message, ScanJobEvent.class);
             String type = event.getType();
             String filePath = event.getScanFilePath();

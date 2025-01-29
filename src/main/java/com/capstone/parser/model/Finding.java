@@ -1,62 +1,31 @@
 package com.capstone.parser.model;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Our common schema for all findings, regardless of the tool.
- */
 public class Finding {
 
-    // Unique ID for the document in Elasticsearch
     private String id;
-
-    // Title of the finding
     private String title;
-
-    // Description or details
     private String desc;
-
-    // Mapped internal severity
     private FindingSeverity severity;
-
-    // Mapped internal state
     private FindingState state;
-
-    // Timestamps
-    private Instant createdAt;
-    private Instant updatedAt;
-
-    // URL to the external alert (e.g., GitHub alert URL)
     private String url;
-
-    // Which scanning tool or type generated this (code scan, dependabot, secret, etc.)
     private ScanToolType toolType;
 
-    // CVE if present
     private String cve;
-
-    // List of CWEs, if any
     private List<String> cwes;
-
-    // CVSS score or vector
     private String cvss;
 
-    // For example, "js/template-object-injection" or "github_personal_access_token"
     private String type;
 
-    // Suggestions or recommendations
     private String suggestions;
 
-    // Path in the repo or manifest file where the problem is found
     private String filePath;
 
-    // For library vulnerabilities
     private String componentName;
     private String componentVersion;
 
-    // All other tool-specific properties
     private Map<String, Object> toolAdditionalProperties;
 
     // Getters and setters ...
@@ -93,20 +62,6 @@ public class Finding {
     }
     public void setState(FindingState state) {
         this.state = state;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getUrl() {

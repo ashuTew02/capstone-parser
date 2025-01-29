@@ -1,12 +1,5 @@
 package com.capstone.parser.dto;
 
-/**
- * Represents the message from the Kafka topic:
- * {
- *   "type": "code-scan" | "dependabot" | "secret-scan",
- *   "scanFilePath": "<file path where JSON is located>"
- * }
- */
 public class ScanJobEvent {
 
     // e.g. "code-scan", "dependabot", "secret-scan"

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -41,10 +40,6 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
 
         String ghState = (String) alert.get("state");
         String url = (String) alert.get("url");
-        String createdAtStr = (String) alert.get("created_at");
-        String updatedAtStr = (String) alert.get("updated_at");
-        Instant createdAt = createdAtStr != null ? Instant.parse(createdAtStr) : Instant.now();
-        Instant updatedAt = updatedAtStr != null ? Instant.parse(updatedAtStr) : Instant.now();
 
         String secretTypeDisplay = (String) alert.get("secret_type_display_name");
         String secretType = (String) alert.get("secret_type");
@@ -64,8 +59,6 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
         finding.setDesc("Secret found in repo (type: " + secretType + ")");
         finding.setSeverity(internalSeverity);
         finding.setState(internalState);
-        finding.setCreatedAt(createdAt);
-        finding.setUpdatedAt(updatedAt);
         finding.setUrl(url);
         finding.setToolType(ScanToolType.SECRET_SCAN);
         finding.setCve(null);

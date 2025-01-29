@@ -24,11 +24,11 @@ public class ElasticSearchService {
         try {
             IndexRequest<Finding> request = IndexRequest.of(builder ->
                 builder.index("findings")
-                       .id(finding.getId()) // if you want to use the ID as doc ID
+                       .id(finding.getId())
                        .document(finding)
             );
             IndexResponse response = esClient.index(request);
-            // handle response if needed
+            System.out.println("Saved " + finding.getToolType() +" job to ES findings index with _id: " + response.id());
         } catch (Exception e) {
             // log or handle
             e.printStackTrace();

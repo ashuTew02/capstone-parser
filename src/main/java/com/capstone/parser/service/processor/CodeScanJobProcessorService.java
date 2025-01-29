@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -37,17 +36,13 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Finding mapAlertToFinding(Map<String, Object> alert) {
         // Generate a unique ID for each document
         String uniqueId = UUID.randomUUID().toString();
 
         String ghState = (String) alert.get("state");
         String url = (String) alert.get("url");
-        String createdAtStr = (String) alert.get("created_at");
-        String updatedAtStr = (String) alert.get("updated_at");
-
-        Instant createdAt = createdAtStr != null ? Instant.parse(createdAtStr) : Instant.now();
-        Instant updatedAt = updatedAtStr != null ? Instant.parse(updatedAtStr) : Instant.now();
 
         Map<String, Object> rule = (Map<String, Object>) alert.get("rule");
         String title = null;
@@ -102,8 +97,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         finding.setDesc(desc);
         finding.setSeverity(internalSeverity);
         finding.setState(internalState);
-        finding.setCreatedAt(createdAt);
-        finding.setUpdatedAt(updatedAt);
+
         finding.setUrl(url);
         finding.setToolType(ScanToolType.CODE_SCAN);
         finding.setCve(null); // Usually no CVE in code-scan

@@ -13,4 +13,13 @@ spring:
 
 parser:
   kafka:
-    topic: "parser-job-ingestion-topic"
+    topic: "scan-job"
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: ERROR
+      springframework:
+        kafka: ERROR
+    kafka: ERROR
