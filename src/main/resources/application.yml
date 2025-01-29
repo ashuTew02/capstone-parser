@@ -1,0 +1,16 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: parser
+  kafka:
+    # This is the standard Spring Boot property for bootstrap servers.
+    # You can also define custom properties if you like.
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: parser-consumer-group
+
+parser:
+  kafka:
+    topic: "parser-job-ingestion-topic"
