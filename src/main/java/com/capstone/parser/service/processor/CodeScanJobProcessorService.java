@@ -52,7 +52,8 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         String ruleId = null;
 
         if (rule != null) {
-            title = (String) rule.get("name");
+            title = (String) rule.get("description");
+            // System.out.println(title);
             desc = (String) rule.get("full_description");
             // GH severity is "security_severity_level" or "severity"
             ghSeverity = (String) rule.get("security_severity_level");
