@@ -70,10 +70,15 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
             List<String> tags = (List<String>) rule.get("tags");
             for (String tag : tags) {
                 if (tag.contains("cwe/")) {
-                    cwes.add(tag);
+                    // This will keep the external/ things
+                    // cwes.add(tag);
+
+                    //this will convert the cwe to format CWE-341
+                    cwes.add(tag.replaceAll(".*cwe[-/](\\d+)", "CWE-$1"));
                 }
             }
         }
+
 
         // location path
         String filePath = null;
