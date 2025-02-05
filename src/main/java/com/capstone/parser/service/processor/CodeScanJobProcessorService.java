@@ -5,21 +5,27 @@ import com.capstone.parser.service.ElasticSearchService;
 import com.capstone.parser.service.StateSeverityMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.*;
+
+import com.capstone.parser.service.github.mapper.GitHubCodeScanMapper;
 
 @Service
 public class CodeScanJobProcessorService implements ScanJobProcessorService {
 
     private final ElasticSearchService elasticSearchService;
     private final ObjectMapper objectMapper;
+    private final GitHubCodeScanMapper mapper;
 
     public CodeScanJobProcessorService(ElasticSearchService elasticSearchService,
-                                       ObjectMapper objectMapper) {
+                                       ObjectMapper objectMapper,
+                                       GitHubCodeScanMapper mapper) {
         this.elasticSearchService = elasticSearchService;
         this.objectMapper = objectMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -94,7 +100,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         String dismissedReason = (String) alert.get("dismissed_reason");
 
         // Map GH state -> internal
-        FindingState internalState = StateSeverityMapper.mapGitHubState(ghState, dismissedReason);
+        FindingState internalState = mapper.toFindingState(ghState, dismissedReason);
         FindingSeverity internalSeverity = StateSeverityMapper.mapGitHubSeverity(ghSeverity);
 
         Finding finding = new Finding();
@@ -117,6 +123,8 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
 
         // Put entire alert in toolAdditionalProperties
         finding.setToolAdditionalProperties(alert);
+
+        //CREATED AT AND UPDATED AT WILL BE SET LATER IN THE ELASTIC SEARCH SERVICE.
 
         return finding;
     }

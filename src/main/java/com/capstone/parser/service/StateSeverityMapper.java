@@ -26,8 +26,12 @@ public class StateSeverityMapper {
                 return FindingState.FIXED;
             case "dismissed":
                 // If there's a reason like "false positive," map to that
-                if (dismissedReason != null && dismissedReason.toLowerCase().contains("false")) {
-                    return FindingState.FALSE_POSITIVE;
+                if (dismissedReason != null) {
+                    String reasonLower = dismissedReason.toLowerCase(Locale.ROOT);
+                    // Map "false positive" to our FALSE_POSITIVE
+                    if ("false positive".equals(reasonLower)) {
+                        return FindingState.FALSE_POSITIVE;
+                    }
                 }
                 return FindingState.SUPPRESSED;
             default:

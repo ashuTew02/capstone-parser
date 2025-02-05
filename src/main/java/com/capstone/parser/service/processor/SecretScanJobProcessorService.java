@@ -43,6 +43,8 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
 
         String secretTypeDisplay = (String) alert.get("secret_type_display_name");
         String secretType = (String) alert.get("secret_type");
+        String resolution = (String) alert.get("resolution");
+
 
         // GH has no explicit severity for secrets, we define default = HIGH or CRITICAL
         FindingSeverity internalSeverity = StateSeverityMapper.mapGitHubSeverity(null);
@@ -51,7 +53,7 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
         // "open" => "open"
         // "dismissed" => "suppressed"? 
         // etc. No "dismissed_reason" typically for secret scanning, but let's just pass null
-        FindingState internalState = StateSeverityMapper.mapGitHubState(ghState, null);
+        FindingState internalState = StateSeverityMapper.mapGitHubState(ghState, resolution);
 
         Finding finding = new Finding();
         finding.setId(uniqueId);

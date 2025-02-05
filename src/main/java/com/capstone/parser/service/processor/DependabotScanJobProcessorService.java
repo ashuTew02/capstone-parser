@@ -5,21 +5,27 @@ import com.capstone.parser.service.ElasticSearchService;
 import com.capstone.parser.service.StateSeverityMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.*;
+
+import com.capstone.parser.service.github.mapper.GitHubDependabotMapper;
 
 @Service
 public class DependabotScanJobProcessorService implements ScanJobProcessorService {
 
     private final ElasticSearchService elasticSearchService;
     private final ObjectMapper objectMapper;
+    private final GitHubDependabotMapper mapper;
 
     public DependabotScanJobProcessorService(ElasticSearchService elasticSearchService,
-                                             ObjectMapper objectMapper) {
+                                             ObjectMapper objectMapper,
+                                             GitHubDependabotMapper mapper) {
         this.elasticSearchService = elasticSearchService;
         this.objectMapper = objectMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
         }
 
         // map GH states to internal
-        FindingState internalState = StateSeverityMapper.mapGitHubState(ghState, dismissedReason);
+        FindingState internalState = mapper.toFindingState(ghState, dismissedReason);
         FindingSeverity internalSeverity = StateSeverityMapper.mapGitHubSeverity(ghSeverity);
 
         Finding finding = new Finding();
