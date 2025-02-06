@@ -3,6 +3,7 @@ package com.capstone.parser.service.processor;
 import com.capstone.parser.model.*;
 import com.capstone.parser.service.ElasticSearchService;
 import com.capstone.parser.service.StateSeverityMapper;
+import com.capstone.parser.service.github.mapper.GitHubSecretScanMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,14 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
 
     private final ElasticSearchService elasticSearchService;
     private final ObjectMapper objectMapper;
+    private final GitHubSecretScanMapper mapper;
 
     public SecretScanJobProcessorService(ElasticSearchService elasticSearchService,
-                                         ObjectMapper objectMapper) {
+                                         ObjectMapper objectMapper,
+                                         GitHubSecretScanMapper mapper) {
         this.elasticSearchService = elasticSearchService;
         this.objectMapper = objectMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
         // "open" => "open"
         // "dismissed" => "suppressed"? 
         // etc. No "dismissed_reason" typically for secret scanning, but let's just pass null
-        FindingState internalState = StateSeverityMapper.mapGitHubState(ghState, resolution);
+        FindingState internalState = mapper.toFindingState(ghState, resolution);
 
         Finding finding = new Finding();
         finding.setId(uniqueId);
