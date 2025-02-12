@@ -29,7 +29,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
     }
 
     @Override
-    public void processJob(String filePath) throws Exception {
+    public void processJob(String filePath, String esIndexOfFindings) throws Exception {
         // JSON file is an array of alerts
         List<Map<String, Object>> alerts = objectMapper.readValue(
                 new File(filePath),
@@ -38,7 +38,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
 
         for (Map<String, Object> alert : alerts) {
             Finding finding = mapAlertToFinding(alert);
-            elasticSearchService.saveFinding(finding);
+            elasticSearchService.saveFinding(finding, esIndexOfFindings);
         }
     }
 

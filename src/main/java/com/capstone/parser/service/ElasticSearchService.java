@@ -33,12 +33,9 @@ public class ElasticSearchService {
         this.toolDeduplicatorService = toolDeduplicatorService;
     }
 
-    /**
-     * Save the Finding document to the "findings" index in ES.
-     */
-    public void saveFinding(Finding finding) {
+    public void saveFinding(Finding finding, String esIndexOfFindings) {
         try {
-            List<Finding> findings = searchFindings(finding.getToolType());
+            List<Finding> findings = searchFindings(finding.getToolType(), esIndexOfFindings);
             DeduplicatorResponse deduplicatorResponse = toolDeduplicatorService.checkDuplication(finding, findings);
 
             Boolean canSave = deduplicatorResponse.getCanSave();
@@ -53,7 +50,7 @@ public class ElasticSearchService {
                 finding.setCreatedAt(LocalDateTime.now().toString());
                 
                 IndexRequest<Finding> request = IndexRequest.of(builder ->
-                    builder.index("findings")
+                    builder.index(esIndexOfFindings)
                         .id(finding.getId())
                         .document(finding)
                     );
@@ -86,7 +83,7 @@ public class ElasticSearchService {
             
                 // Re-index the (updated) oldFinding using the same _id
                 IndexRequest<Finding> request = IndexRequest.of(builder ->
-                    builder.index("findings")
+                    builder.index(esIndexOfFindings)
                            .id(oldFinding.getId())     // same Elasticsearch ID
                            .document(oldFinding)
                 );
@@ -102,7 +99,7 @@ public class ElasticSearchService {
         }
     }
 
-    public List<Finding> searchFindings(ScanToolType toolType) {
+    public List<Finding> searchFindings(ScanToolType toolType, String esIndexOfFindings) {
         List<Finding> allFindings = new ArrayList<>();
 
         // Build a term query for the "toolType" field. Adjust field name as needed.
@@ -118,7 +115,7 @@ public class ElasticSearchService {
             while (true) {
                 final int currentFrom = from;
                 SearchResponse<Finding> response = esClient.search(s -> s
-                        .index("findings")
+                        .index(esIndexOfFindings)
                         .query(query)
                         .from(currentFrom)
                         .size(size)

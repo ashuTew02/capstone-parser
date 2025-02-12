@@ -29,7 +29,7 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
     }
 
     @Override
-    public void processJob(String filePath) throws Exception {
+    public void processJob(String filePath, String esIndexOfFindings) throws Exception {
         List<Map<String, Object>> alerts = objectMapper.readValue(
                 new File(filePath),
                 new TypeReference<List<Map<String, Object>>>() {}
@@ -37,7 +37,7 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
 
         for (Map<String, Object> alert : alerts) {
             Finding finding = mapAlertToFinding(alert);
-            elasticSearchService.saveFinding(finding);
+            elasticSearchService.saveFinding(finding, esIndexOfFindings);
         }
     }
 

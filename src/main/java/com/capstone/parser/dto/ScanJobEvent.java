@@ -8,6 +8,14 @@ public class ScanJobEvent {
     // path to JSON file containing alerts
     private String scanFilePath;
 
+    private String esIndexOfFindings;
+
+    public String getEsIndexOfFindings() {
+        return esIndexOfFindings;
+    }
+    public void setEsIndexOfFindings(String esIndexOfFindings) {
+        this.esIndexOfFindings = esIndexOfFindings;
+    }
     // Getters and Setters
     public String getType() {
         return type;

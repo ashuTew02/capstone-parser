@@ -42,16 +42,17 @@ public class ParserJobConsumer {
             ScanJobEvent event = objectMapper.readValue(message, ScanJobEvent.class);
             String type = event.getType();
             String filePath = event.getScanFilePath();
+            String esIndexOfFindings = event.getEsIndexOfFindings();
 
             switch (type) {
                 case "code-scan":
-                    codeScanJobProcessorService.processJob(filePath);
+                    codeScanJobProcessorService.processJob(filePath, esIndexOfFindings);
                     break;
                 case "dependabot":
-                    dependabotScanJobProcessorService.processJob(filePath);
+                    dependabotScanJobProcessorService.processJob(filePath, esIndexOfFindings);
                     break;
                 case "secret-scan":
-                    secretScanJobProcessorService.processJob(filePath);
+                    secretScanJobProcessorService.processJob(filePath, esIndexOfFindings);
                     break;
                 default:
                     // Log unknown type or handle error
