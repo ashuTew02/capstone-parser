@@ -111,7 +111,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         finding.setState(internalState);
 
         finding.setUrl(url);
-        finding.setToolType(ScanToolType.CODE_SCAN);
+        finding.setToolType(Tool.CODE_SCAN);
         finding.setCve(null); // Usually no CVE in code-scan
         finding.setCwes(cwes);
         finding.setCvss(null); // Not typically provided

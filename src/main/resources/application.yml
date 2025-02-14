@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: parser
+  datasource:
+    url: jdbc:mysql://localhost:3306/authdb
+    username: root
+    password: root
   kafka:
     # This is the standard Spring Boot property for bootstrap servers.
     # You can also define custom properties if you like.

@@ -106,7 +106,7 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
         finding.setSeverity(internalSeverity);
         finding.setState(internalState);
         finding.setUrl(url);
-        finding.setToolType(ScanToolType.DEPENDABOT);
+        finding.setToolType(Tool.DEPENDABOT);
         finding.setCve(cve);
         finding.setCwes(cwes);
         finding.setCvss(cvss);

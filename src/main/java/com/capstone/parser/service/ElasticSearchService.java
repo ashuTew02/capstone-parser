@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.capstone.parser.dto.DeduplicatorResponse;
 import com.capstone.parser.model.Finding;
-import com.capstone.parser.model.ScanToolType;
+import com.capstone.parser.model.Tool;
 import com.capstone.parser.service.deduplicator.ToolDeduplicatorService;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
@@ -99,7 +99,7 @@ public class ElasticSearchService {
         }
     }
 
-    public List<Finding> searchFindings(ScanToolType toolType, String esIndexOfFindings) {
+    public List<Finding> searchFindings(Tool toolType, String esIndexOfFindings) {
         List<Finding> allFindings = new ArrayList<>();
 
         // Build a term query for the "toolType" field. Adjust field name as needed.

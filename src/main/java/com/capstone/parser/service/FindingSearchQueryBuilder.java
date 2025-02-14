@@ -2,7 +2,7 @@ package com.capstone.parser.service;
 
 import com.capstone.parser.model.FindingSeverity;
 import com.capstone.parser.model.FindingState;
-import com.capstone.parser.model.ScanToolType;
+import com.capstone.parser.model.Tool;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 
@@ -14,7 +14,7 @@ public class FindingSearchQueryBuilder {
         this.builder = new BoolQuery.Builder();
     }
 
-    public FindingSearchQueryBuilder withToolType(ScanToolType toolType) {
+    public FindingSearchQueryBuilder withToolType(Tool toolType) {
         if (toolType != null) {
             builder.must(m -> m.term(t -> t.field("toolType.keyword").value(toolType.name())));
         }

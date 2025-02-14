@@ -66,7 +66,7 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
         finding.setSeverity(internalSeverity);
         finding.setState(internalState);
         finding.setUrl(url);
-        finding.setToolType(ScanToolType.SECRET_SCAN);
+        finding.setToolType(Tool.SECRET_SCAN);
         finding.setCve(null);
         finding.setCwes(new ArrayList<>());
         finding.setCvss(null);
