@@ -25,50 +25,58 @@ public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.consumer.group-id:parser-consumer-group}")
-    private String consumerGroupId;
-
+    /**
+     * Consumer Config
+     */
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId);
+        // We will consume everything as plain Strings
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        // Additional config if needed
         return props;
     }
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
+        // Consumer for <String, String>
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
+                new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 
+    /**
+     * Producer Config
+     */
     @Bean
     public Map<String, Object> producerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        // We will produce everything as plain Strings
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        // Additional config if needed
+        // Disable adding any type headers
+        // (not strictly needed with StringSerializer, but just to be sure)
+        props.put("spring.json.add.type.headers", false);
         return props;
     }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
+        // Producer for <String, String>
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
+        // KafkaTemplate for <String, String>
         return new KafkaTemplate<>(producerFactory());
     }
 }
