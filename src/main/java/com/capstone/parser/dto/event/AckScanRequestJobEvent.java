@@ -5,17 +5,17 @@ import java.util.UUID;
 import com.capstone.parser.dto.event.payload.AckJobEventPayload;
 import com.capstone.parser.model.EventType;
 
-public class AckScanParseJobEvent implements Event<AckJobEventPayload>{
+public class AckScanRequestJobEvent implements Event<AckJobEventPayload>{
     private AckJobEventPayload payload;
     private String eventId;
-    private EventType type = EventType.ACK_SCAN_PARSE_JOB;
+    private EventType type = EventType.ACK_SCAN_REQUEST_JOB;
 
-    public AckScanParseJobEvent(AckJobEventPayload payload) {
+    public AckScanRequestJobEvent(AckJobEventPayload payload) {
         this.eventId = UUID.randomUUID().toString();
         this.payload = payload;
     }
 
-    public AckScanParseJobEvent() {
+    public AckScanRequestJobEvent() {
         this.eventId = UUID.randomUUID().toString();
     }
 

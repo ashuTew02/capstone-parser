@@ -2,20 +2,20 @@ package com.capstone.parser.dto.event;
 
 import java.util.UUID;
 
-import com.capstone.parser.dto.event.payload.AckJobEventPayload;
+import com.capstone.parser.dto.event.payload.ScanParseEventPayload;
 import com.capstone.parser.model.EventType;
 
-public class AckScanParseJobEvent implements Event<AckJobEventPayload>{
-    private AckJobEventPayload payload;
+public class ScanParseEvent implements Event<ScanParseEventPayload>{
+    private ScanParseEventPayload payload;
     private String eventId;
-    private EventType type = EventType.ACK_SCAN_PARSE_JOB;
+    private EventType type = EventType.SCAN_PARSE;
 
-    public AckScanParseJobEvent(AckJobEventPayload payload) {
+    public ScanParseEvent(ScanParseEventPayload payload) {
         this.eventId = UUID.randomUUID().toString();
         this.payload = payload;
     }
 
-    public AckScanParseJobEvent() {
+    public ScanParseEvent() {
         this.eventId = UUID.randomUUID().toString();
     }
 
@@ -25,7 +25,7 @@ public class AckScanParseJobEvent implements Event<AckJobEventPayload>{
     }
 
     @Override
-    public AckJobEventPayload getPayload() {
+    public ScanParseEventPayload getPayload() {
         return payload;
     }
 

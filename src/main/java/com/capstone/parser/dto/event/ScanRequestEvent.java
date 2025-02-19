@@ -2,25 +2,23 @@ package com.capstone.parser.dto.event;
 
 import java.util.UUID;
 
-import com.capstone.parser.dto.event.payload.StateUpdateJobEventPayload;
+import com.capstone.parser.dto.event.payload.ScanRequestEventPayload;
 import com.capstone.parser.model.EventType;
 
-public final class StateUpdateJobEvent implements Event<StateUpdateJobEventPayload> {
-    private StateUpdateJobEventPayload payload;
+public final class ScanRequestEvent implements Event<ScanRequestEventPayload> {
+    private ScanRequestEventPayload payload;
     private String eventId;
-    private EventType type = EventType.STATE_UPDATE_JOB;
+    private EventType type = EventType.SCAN_REQUEST;
 
 
-    public StateUpdateJobEvent(StateUpdateJobEventPayload payload) {
+    public ScanRequestEvent(ScanRequestEventPayload payload) {
         this.eventId = UUID.randomUUID().toString();
         this.payload = payload;
     }
 
-    
-    public StateUpdateJobEvent() {
+    public ScanRequestEvent() {
         this.eventId = UUID.randomUUID().toString();
     }
-
 
     @Override
     public EventType getType() {
@@ -28,7 +26,7 @@ public final class StateUpdateJobEvent implements Event<StateUpdateJobEventPaylo
     }
 
     @Override
-    public StateUpdateJobEventPayload getPayload() {
+    public ScanRequestEventPayload getPayload() {
         return payload;
     }
 

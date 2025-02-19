@@ -21,15 +21,15 @@ public class AckScanParseJobEventProducer {
         this.objectMapper = objectMapper;
     }
 
-    public void produce(String jobId) {
+    public void produce(Long jobId, JobStatus status) {
         try {
-            AckJobEventPayload payload = new AckJobEventPayload(jobId, JobStatus.SUCCESS);
+            AckJobEventPayload payload = new AckJobEventPayload(jobId, status);
             AckScanParseJobEvent ackEvent = new AckScanParseJobEvent(payload);
 
             String json = objectMapper.writeValueAsString(ackEvent);
 
             kafkaTemplate.send(KafkaTopic.ACK_JOB.getTopicName(),
-                               jobId,
+                               AckScanParseJobEvent.class.getName(),
                                json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

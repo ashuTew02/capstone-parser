@@ -2,9 +2,10 @@ package com.capstone.parser.kafka.consumer;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import com.capstone.parser.dto.event.ScanParseJobEvent;
-import com.capstone.parser.dto.event.payload.ScanParseJobEventPayload;
-import com.capstone.parser.model.KafkaTopic;
+
+import com.capstone.parser.dto.event.job.ScanParseJobEvent;
+import com.capstone.parser.dto.event.payload.job.ScanParseJobEventPayload;
+import com.capstone.parser.model.JobStatus;
 import com.capstone.parser.model.Tool;
 import com.capstone.parser.repository.TenantRepository;
 import com.capstone.parser.service.processor.CodeScanJobProcessorService;
@@ -43,11 +44,13 @@ public class ParserJobConsumer {
         containerFactory = "kafkaListenerContainerFactory"
     )
     public void consume(String message) {
+        Long wholeJobId = null;
         try {
             ScanParseJobEvent event = objectMapper.readValue(message, ScanParseJobEvent.class);
             System.out.println("9. Parser Received ScanParseJobEvent from JFC id: " + event.getEventId());
 
             ScanParseJobEventPayload payload = event.getPayload();
+            wholeJobId = payload.getJobId();
             Tool tool = payload.getTool();
             String filePath = payload.getScanFilePath();
             Long tenantId = payload.getTenantId();
@@ -74,10 +77,13 @@ public class ParserJobConsumer {
             // 2) Produce ACK to JFC
             System.out.println("10. Parser Processes ScanParseJobEvent id: " + event.getEventId());
 
-            ackProducer.produce(event.getEventId());
+            ackProducer.produce(payload.getJobId(), JobStatus.SUCCESS);
             System.out.println("11. Parser Produces AckScanParseJobEvent for job id: " + event.getEventId());
 
         } catch (Exception e) {
+            if(wholeJobId != null) {
+                ackProducer.produce(wholeJobId, JobStatus.FAILURE);
+            }
             // if(e.getMessage());
             // e.printStackTrace();
             System.out.println(e.getMessage());
