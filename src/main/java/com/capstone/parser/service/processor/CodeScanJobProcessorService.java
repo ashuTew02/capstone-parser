@@ -120,6 +120,7 @@ public class CodeScanJobProcessorService implements ScanJobProcessorService {
         finding.setFilePath(filePath);
         finding.setComponentName(null);
         finding.setComponentVersion(null);
+        finding.setTicketId(null);
 
         // Put entire alert in toolAdditionalProperties
         finding.setToolAdditionalProperties(alert);

@@ -116,6 +116,8 @@ public class DependabotScanJobProcessorService implements ScanJobProcessorServic
         finding.setComponentName(componentName);
         finding.setComponentVersion(null);
         finding.setToolAdditionalProperties(alert);
+        finding.setTicketId(null);
+
 
         return finding;
     }

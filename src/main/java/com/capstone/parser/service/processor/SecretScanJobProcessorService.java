@@ -76,6 +76,8 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
         finding.setComponentName(null);
         finding.setComponentVersion(null);
         finding.setToolAdditionalProperties(alert);
+        finding.setTicketId(null);
+
 
         return finding;
     }
