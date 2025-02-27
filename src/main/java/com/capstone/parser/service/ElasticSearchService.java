@@ -33,14 +33,14 @@ public class ElasticSearchService {
         this.toolDeduplicatorService = toolDeduplicatorService;
     }
 
-    public void saveFinding(Finding finding, String esIndexOfFindings) {
+    public Finding saveFinding(Finding finding, String esIndexOfFindings) {
         try {
             List<Finding> findings = searchFindings(finding.getToolType(), esIndexOfFindings);
             DeduplicatorResponse deduplicatorResponse = toolDeduplicatorService.checkDuplication(finding, findings);
 
             Boolean canSave = deduplicatorResponse.getCanSave();
             if(!canSave) {
-                return;
+                return deduplicatorResponse.getOldFinding();
             }
 
             finding.setUpdatedAt(LocalDateTime.now().toString());
@@ -56,6 +56,7 @@ public class ElasticSearchService {
                     );
                 IndexResponse response = esClient.index(request);
                 System.out.println("Saved " + finding.getToolType() +" job to ES findings index with _id: " + response.id());
+                return finding;
             } else {
                 // We have the old document already in Elasticsearch
                 Finding oldFinding = deduplicatorResponse.getOldFinding();
@@ -91,11 +92,15 @@ public class ElasticSearchService {
                 System.out.println("Updated " + finding.getToolType() 
                                    + " job in ES findings index with _id: " 
                                    + response.id());
+                return oldFinding;
             }
+
+
 
         } catch (Exception e) {
             // log or handle
             e.printStackTrace();
+            return new Finding();
         }
     }
 

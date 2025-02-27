@@ -27,16 +27,19 @@ public class SecretScanJobProcessorService implements ScanJobProcessorService {
     }
 
     @Override
-    public void processJob(String filePath, String esIndexOfFindings) throws Exception {
+    public List<String> processJob(String filePath, String esIndexOfFindings) throws Exception {
         List<Map<String, Object>> alerts = objectMapper.readValue(
                 new File(filePath),
                 new TypeReference<List<Map<String, Object>>>() {}
         );
-
+        List<String> findingIds = new ArrayList<>();
         for (Map<String, Object> alert : alerts) {
             Finding finding = mapAlertToFinding(alert);
-            elasticSearchService.saveFinding(finding, esIndexOfFindings);
+            Finding finalFinding = elasticSearchService.saveFinding(finding, esIndexOfFindings);
+            findingIds.add(finalFinding.getId());
         }
+
+        return findingIds;
     }
 
     private Finding mapAlertToFinding(Map<String, Object> alert) {
